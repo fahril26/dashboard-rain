@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { lazy, useState } from "react";
 
-const Accordion = ({ submenus, config }) => {
-  const [active, setActive] = useState(null);
+const Navlink = lazy(() => import("./Navlink"));
+
+const Accordion = ({ submenus, config, currentPath }) => {
+  const [active, setActive] = useState(false);
 
   const handleToggle = () => {
     setActive(!active);
@@ -12,10 +13,11 @@ const Accordion = ({ submenus, config }) => {
     <li>
       <button
         onClick={handleToggle}
-        className="w-full hover:bg-blue-600 cursor-pointer text-white text-lg flex justify-between items-center p-2 rounded-md"
+        className="w-full hover:bg-blue-700 cursor-pointer text-white text-lg flex justify-between items-center p-2 rounded-md"
       >
         <div className="flex gap-2 items-center">
-          <config.icon /> {config.text}
+          {config.icon && <config.icon />}
+          {config.text}
         </div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -36,22 +38,13 @@ const Accordion = ({ submenus, config }) => {
         </svg>
       </button>
 
-      <ul
+      <Navlink
+        links={submenus}
+        currentPath={currentPath}
         className={`pl-4 space-y-2 mt-2 transition-all duration-300 ease-in-out  ${
           active ? "translate-y-0 opacity-100" : "-translate-y-2.5 opacity-0"
         }`}
-      >
-        {submenus?.map((submenu, idx) => (
-          <li key={idx} className="w-full">
-            <Link
-              to={submenu.path}
-              className="text-white block w-full hover:bg-blue-600 p-2 rounded-sm"
-            >
-              {submenu.text}
-            </Link>
-          </li>
-        ))}
-      </ul>
+      />
     </li>
   );
 };

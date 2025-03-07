@@ -1,49 +1,133 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../atom";
-import { FaEyeSlash } from "react-icons/fa";
+import { FaEyeSlash, FaUpload } from "react-icons/fa";
 
-const InputForm = ({ config, register, inputValues, error }) => {
-  const [showPassword, setShowPassword] = useState(false);
+const InputForm = ({ config, register, watch, error }) => {
+  const [showPassword, setShowPassword] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [fileName, setFileName] = useState("");
+  const getImageDefault = config.find(
+    (input) => input.type === "file"
+  )?.defaultValue;
+
+  useEffect(() => {
+    if (getImageDefault) {
+      setImagePreview(
+        `${import.meta.env.VITE_API_PUBLIC_IMG}${getImageDefault}`
+      );
+      setFileName(getImageDefault);
+    }
+  }, [getImageDefault]);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+      setFileName(file.name);
+    } else {
+      setImagePreview(null);
+      setFileName("");
+    }
+  };
 
   return (
     <>
-      {config.map((data, index) => (
-        <div className="mb-6 relative" key={index}>
-          <input
-            type={!showPassword ? data.type : "text"}
-            {...register(data.name, data.optionError)}
-            id={data.name}
-            className="peer w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 bg-white"
-          />
-          <label
-            htmlFor={data.name}
-            style={{ pointerEvents: "none" }}
-            className={`absolute left-4 bg-white transition-all text-gray-600 ${
-              inputValues[data.name]
-                ? "-top-2.5 text-xs px-1"
-                : "top-2 text-base"
-            } peer-focus:text-xs peer-focus:px-1 peer-focus:-top-2.5 peer-focus:text-blue-500 peer-focus:font-semibold cursor-text`}
-          >
-            {data.labelText}
-          </label>
+      {config.map((data, index) => {
+        const value = watch(data.name);
 
-          {data.icon && (
-            <Button
-              type={"button"}
-              className="absolute right-4 top-3"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {!showPassword ? <data.icon /> : <FaEyeSlash />}
-            </Button>
-          )}
+        return (
+          <div className="mb-6 relative" key={index}>
+            {data.type === "select" ? (
+              <select
+                {...register(data.name, data.optionError)}
+                id={data.name}
+                defaultValue={""}
+                className="peer w-40 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 bg-white"
+              >
+                <option value="" disabled>
+                  {data.optionDisabledText}
+                </option>
+                {data.options.map((option, index) => (
+                  <option key={index} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            ) : data.type === "file" ? (
+              <div className="flex flex-col ">
+                <div className="relative w-40 h-40 border border-gray-300 rounded-md overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer hover:border-blue-500 transition-all">
+                  {imagePreview && (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="absolute inset-0 w-full h-full object-cover "
+                    />
+                  )}
 
-          {error[data.name] && (
-            <small className="text-[10px] mb-3 text-red-600">
-              {error[data.name]?.message}
-            </small>
-          )}
-        </div>
-      ))}
+                  {!imagePreview && (
+                    <div className="flex flex-col items-center text-gray-500">
+                      <FaUpload className="text-2xl mb-2" />
+                      <span className="text-sm">Upload Image</span>
+                    </div>
+                  )}
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    {...register(data.name, data.optionError)}
+                    id={data.name}
+                    onChange={handleFileChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                </div>
+
+                {fileName && (
+                  <span className="text-xs mt-2 text-gray-600">{fileName}</span>
+                )}
+              </div>
+            ) : (
+              <input
+                type={!showPassword ? data.type : "text"}
+                {...register(data.name, data.optionError)}
+                id={data.name}
+                className="peer w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 bg-white"
+              />
+            )}
+
+            {data.type !== "file" && (
+              <label
+                htmlFor={data.name}
+                style={{ pointerEvents: "none" }}
+                className={`absolute left-4 bg-white transition-all text-gray-600 
+                  ${
+                    value !== undefined && value !== ""
+                      ? "-top-2.5 text-xs px-1"
+                      : "top-2 text-base"
+                  } 
+                  peer-focus:text-xs peer-focus:px-1 peer-focus:-top-2.5 peer-focus:text-blue-500 peer-focus:font-semibold cursor-text`}
+              >
+                {data.labelText}
+              </label>
+            )}
+
+            {data.icon && (
+              <Button
+                type={"button"}
+                className="absolute right-4 top-3"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {!showPassword ? <data.icon /> : <FaEyeSlash />}
+              </Button>
+            )}
+
+            {error[data.name] && (
+              <small className="block text-[10px] mt-1 text-red-600">
+                {error[data.name]?.message}
+              </small>
+            )}
+          </div>
+        );
+      })}
     </>
   );
 };

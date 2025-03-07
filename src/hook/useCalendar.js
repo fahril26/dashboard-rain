@@ -1,122 +1,138 @@
 import { useEffect, useState } from "react";
+import { useGlobalHook } from "./useGlobalHook";
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  differenceInDays,
+  startOfWeek,
+  endOfWeek,
+} from "date-fns";
 
-const generateCalendarData = (month, year) => {
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDay = new Date(year, month, 1).getDay();
+const generateCalendar = (currentDate) => {
+  const startDate = startOfWeek(startOfMonth(currentDate));
+  const endDate = endOfWeek(endOfMonth(currentDate));
 
-  const prevMonthDays = new Date(year, month, 0).getDate();
+  const daysInCalendar = eachDayOfInterval({ start: startDate, end: endDate });
 
-  const today = new Date();
-  const todayDate = today.getDate();
-  const todayMonth = today.getMonth();
-  const todayYear = today.getFullYear();
-
-  const calendar = [];
-  let currentDay = 1;
-
-  // Menghitung minggu pertama
-  let currentWeek = [];
-
-  // Menambahkan hari kosong untuk minggu pertama jika diperlukan
-  for (let i = 0; i < firstDay; i++) {
-    currentWeek.push({
-      day: prevMonthDays - (firstDay - i - 1),
-      date: new Date(year, month - 1, prevMonthDays - (firstDay - i - 1)), // Menyimpan objek Date untuk bulan sebelumnya
-      isCurrentMonth: false,
-      isToday: false,
-    });
-  }
-
-  // Mengisi minggu pertama dengan tanggal bulan ini
-  while (currentWeek.length < 7 && currentDay <= daysInMonth) {
-    currentWeek.push({
-      day: currentDay,
-      date: new Date(year, month, currentDay), // Menyimpan objek Date untuk bulan ini
-      isCurrentMonth: true,
-      isToday:
-        currentDay === todayDate && month === todayMonth && year === todayYear,
-    });
-    currentDay++;
-  }
-
-  calendar.push(currentWeek);
-
-  // Mengisi minggu-minggu selanjutnya
-  while (currentDay <= daysInMonth) {
-    currentWeek = [];
-
-    while (currentWeek.length < 7 && currentDay <= daysInMonth) {
-      currentWeek.push({
-        day: currentDay,
-        date: new Date(year, month, currentDay), // Menyimpan objek Date untuk bulan ini
-        isCurrentMonth: true,
-        isToday:
-          currentDay === todayDate &&
-          month === todayMonth &&
-          year === todayYear,
-      });
-      currentDay++;
+  const weeks = [];
+  let week = [];
+  daysInCalendar.forEach((date) => {
+    week.push(date);
+    if (week.length === 7) {
+      weeks.push(week);
+      week = [];
     }
+  });
 
-    calendar.push(currentWeek);
-  }
-
-  // Mengisi tanggal kosong di minggu terakhir dengan tanggal bulan berikutnya
-  const lastWeek = calendar[calendar.length - 1];
-  let lastDay = lastWeek[lastWeek.length - 1]?.day || 0;
-
-  while (lastWeek.length < 7) {
-    lastWeek.push({
-      day: ++lastDay,
-      date: new Date(year, month + 1, lastDay), // Menyimpan objek Date untuk bulan berikutnya
-      isCurrentMonth: false,
-      isToday: false,
-    });
-  }
-
-  return calendar;
+  return weeks;
 };
 
-export const useCalendar = () => {
-  const date = (...params) => new Date(...params);
-  const [month, setMonth] = useState(date().getMonth()); // Menyimpan bulan sekarang
-  const [year, setYear] = useState(date().getFullYear()); // Menyimpan tahun sekarang
+export const useCalendar = (dataEvents, handleService) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [events, setEvents] = useState([]);
+  const [originalEvents, setOriginalEvents] = useState([]);
+  const [updatedEvents, setUpdatedEvents] = useState([]);
   const [calendarData, setCalendarData] = useState([]);
+  const [draggedEvent, setDraggedEvent] = useState(null);
 
-  useEffect(() => {
-    setCalendarData(generateCalendarData(month, year));
-  }, [month, year]);
+  const moveEvent = (date) => {
+    if (!draggedEvent) return null;
 
-  const handleTodayClick = () => {
-    setMonth(date().getMonth());
-    setYear(date().getFullYear());
+    const startDate = new Date(draggedEvent.startDate);
+    const endDate = new Date(draggedEvent.endDate);
+    const daysDiff = differenceInDays(endDate, startDate);
+
+    const newStartDate = normalizeDate(date);
+    const newEndDate = new Date(newStartDate);
+    newEndDate.setDate(newStartDate.getDate() + daysDiff);
+
+    return {
+      ...draggedEvent,
+      startDate: format(newStartDate, "yyyy-MM-dd"),
+      endDate: format(newEndDate, "yyyy-MM-dd"),
+    };
   };
 
-  // Fungsi untuk mengubah bulan
-  const changeMonth = (direction) => {
-    if (direction === "next") {
-      if (month === 11) {
-        setMonth(0);
-        setYear(year + 1);
-      } else {
-        setMonth(month + 1);
-      }
-    } else if (direction === "prev") {
-      if (month === 0) {
-        setMonth(11);
-        setYear(year - 1);
-      } else {
-        setMonth(month - 1);
-      }
+  const handleDragStart = (index) => {
+    setDraggedEvent(events[index]);
+  };
+
+  const handleDrop = (date) => {
+    if (!draggedEvent) return;
+
+    const updatedEvent = moveEvent(date);
+
+    setEvents((prevEvents) =>
+      prevEvents.map((ev) => (ev.id === draggedEvent.id ? updatedEvent : ev))
+    );
+
+    setUpdatedEvents((prev) => {
+      const exists = prev.some((ev) => ev.id === draggedEvent.id);
+      return exists
+        ? prev.map((ev) => (ev.id === draggedEvent.id ? updatedEvent : ev))
+        : [...prev, updatedEvent];
+    });
+
+    setDraggedEvent(null);
+  };
+
+  const handleSave = () => {
+    const isDeleted = confirm("Are you sure you want to save change?");
+
+    if (isDeleted) {
+      handleService(updatedEvents, setUpdatedEvents);
     }
   };
+  const handleCancel = () => {
+    setEvents(JSON.parse(JSON.stringify(originalEvents)));
+    setUpdatedEvents([]);
+  };
+
+  const normalizeDate = (date) => {
+    const newDate = new Date(date);
+    newDate.setHours(0, 0, 0, 0);
+    return newDate;
+  };
+
+  const isEventOnDate = (event, date) => {
+    if (event.startDate === null || event.endDate === null) return false;
+
+    const eventStart = normalizeDate(event.startDate);
+    const eventEnd = normalizeDate(event.endDate);
+    const currentDate = normalizeDate(date);
+
+    return currentDate >= eventStart && currentDate <= eventEnd;
+  };
+
+  const isToday = (date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
+  useEffect(() => {
+    setEvents(dataEvents);
+    setOriginalEvents(JSON.parse(JSON.stringify(dataEvents)));
+    setCalendarData(generateCalendar(currentDate));
+  }, [dataEvents, currentDate]);
 
   return {
-    month,
-    year,
-    date,
     calendarData,
-    changeMonth,
-    handleTodayClick,
+    events,
+    currentDate,
+    updatedEvents,
+    setCurrentDate,
+    handleDrop,
+    handleDragStart,
+    handleSave,
+    handleCancel,
+    isEventOnDate,
+    normalizeDate,
+    isToday,
   };
 };

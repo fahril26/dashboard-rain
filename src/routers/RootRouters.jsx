@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Dashboard } from "../components/layouts";
-import { Banner, Home, Login, PageNotFound } from "../pages";
+import { Banner, Home, Login, About, PageNotFound, Country } from "../pages";
 import { ProtectedRoute, PublicRoute } from "./Middleware";
 
 const RootRouters = () => {
@@ -10,6 +10,8 @@ const RootRouters = () => {
         <Route path="/" element={<ProtectedRoute element={<Dashboard />} />}>
           <Route index element={<Home />} />
           <Route path="/banner" element={<Banner />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/country" element={<Country />} />
         </Route>
         <Route path="/login" element={<PublicRoute element={<Login />} />} />
 

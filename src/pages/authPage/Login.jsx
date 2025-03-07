@@ -26,7 +26,7 @@ const Login = () => {
               configInput={loginPattern}
               buttonText={"Sign In"}
               handleSubmitData={(data) =>
-                handleSubmitData(data, loginService, navigate)
+                handleSubmitData(data, loginService, { navigate })
               }
             />
           </div>

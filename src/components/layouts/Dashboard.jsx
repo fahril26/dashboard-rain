@@ -8,7 +8,9 @@ const Dashboard = () => {
 
       <main className=" w-full h-screen overflow-y-auto">
         <Topbar />
-        {<Outlet />}
+        <div className="p-6">
+          <Outlet />
+        </div>
       </main>
 
       <div
