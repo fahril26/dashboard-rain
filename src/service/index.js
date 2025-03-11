@@ -1,9 +1,9 @@
 import { loginService } from "./authService,";
 import {
   getBannerService,
-  updateScheduleBannerService,
   addBannerService,
   updateBannerService,
+  deleteBannerService,
 } from "./dashboardService/bannerService";
 
 import {
@@ -16,11 +16,11 @@ import {
 export {
   loginService,
   getBannerService,
-  updateScheduleBannerService,
   addBannerService,
   updateBannerService,
   getCountryService,
   addCountryService,
   updateCountryService,
   deleteCountryService,
+  deleteBannerService,
 };

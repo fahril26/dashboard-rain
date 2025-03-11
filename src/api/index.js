@@ -16,8 +16,6 @@ export const GET = (endpoint, accessToken) => {
 };
 
 export const PUT = (endpoint, data, headers) => {
-  console.log(data);
-
   return axios.put(
     `${import.meta.env.VITE_API_URL}/${endpoint}/${data.id}`,
     data,

@@ -30,7 +30,7 @@ const EventLabel = ({
   date,
   handleDragStart,
   normalizeDate,
-  handleShowModal,
+  handleShowSidebar,
 }) => {
   return (
     <div className="flex w-full flex-col gap-1.5">
@@ -42,6 +42,7 @@ const EventLabel = ({
             <div
               draggable
               onDragStart={() => handleDragStart(index)}
+              onClick={() => handleShowSidebar("edit", event)}
               className={`text-white text-xs text-center p-1 hover:shadow-xl
                 ${colors[index % colors.length]} ${getEventRoundedClass(
                 event,
@@ -51,7 +52,6 @@ const EventLabel = ({
               `}
             >
               {event.title}
-              <Tooltip handleShowModal={handleShowModal} event={event} />
             </div>
           </div>
         );

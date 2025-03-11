@@ -6,9 +6,9 @@ import { IoImageOutline } from "react-icons/io5";
 
 export const navLink = [
   { text: "Dashboard", path: "/", icon: LuLayoutDashboard },
-  { text: "Banner", path: "/banner", icon: IoImageOutline },
   { text: "About", path: "/about", icon: PiSealWarning },
   { text: "Film", path: "/film", icon: PiFilmReel },
+  { text: "Banner", path: "/banner", icon: IoImageOutline },
   {
     text: "Location",
     icon: GrMapLocation,

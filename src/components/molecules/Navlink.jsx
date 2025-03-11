@@ -1,6 +1,5 @@
-import { lazy } from "react";
-import { Link, useLocation } from "react-router-dom";
-const Accordion = lazy(() => import("./Accordion"));
+import { Link } from "react-router-dom";
+import Accordion from "./Accordion";
 
 const Navlink = ({ links, className, currentPath }) => {
   return (
@@ -17,7 +16,7 @@ const Navlink = ({ links, className, currentPath }) => {
           <li key={index}>
             <Link
               to={link.path}
-              className={`block w-full hover:bg-blue-700 p-2 rounded ${
+              className={`block w-full hover:bg-blue-700 p-2 rounded mb-2.5 ${
                 currentPath === link.path ? "bg-blue-700" : ""
               }`}
             >

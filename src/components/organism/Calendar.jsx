@@ -1,19 +1,26 @@
 import { Button } from "../atom";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { ConfirmDelete, EventLabel, Form, TableHead } from "../molecules";
+import { ConfirmDelete, EventLabel, Sidebar, TableHead } from "../molecules";
 import { addMonths, format, subMonths } from "date-fns";
 import { useCalendar } from "../../hook/useCalendar";
-import { ModalLayout } from "../layouts";
 import { dayNames } from "../../pattern";
+import {
+  handleCancel,
+  handleDragStart,
+  handleDrop,
+  handleSave,
+} from "../../pattern/calendarLogic";
+import { ModalLayout } from "../layouts";
 
 const Calendar = ({
   dataEvent,
   dataEvents,
   handleService,
-  isModalOpen,
-  handleShowModal,
-  inputForm,
   submitType,
+  handleServiceWithOnClick,
+  stateShowSidebar,
+  stateShowModal,
+  inputForm,
 }) => {
   const {
     calendarData,
@@ -21,58 +28,60 @@ const Calendar = ({
     currentDate,
     updatedEvents,
     setCurrentDate,
+    setUpdatedEvents,
+    draggedEvent,
+    setEvents,
+    setDraggedEvent,
     isEventOnDate,
+    originalEvents,
     isToday,
     normalizeDate,
-    handleDrop,
-    handleDragStart,
-    handleSave,
-    handleCancel,
-  } = useCalendar(dataEvents, handleService);
+  } = useCalendar(dataEvents);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white shadow">
       <div className="flex justify-between items-center border-t border-l border-r rounded-t-sm border-gray-400 p-4">
-        <h2 className="text-lg font-bold">
+        <h2 className="text-lg font-bold flex-1">
           {format(currentDate, "MMMM yyyy")}
         </h2>
 
-        <div className="flex items-center gap-2">
-          <Button onClick={() => setCurrentDate(subMonths(currentDate, 1))}>
-            <IoIosArrowBack />
-          </Button>
-          <Button
-            className={"hover:underline"}
-            onClick={() => setCurrentDate(new Date())}
-          >
-            Today
-          </Button>
-          <Button onClick={() => setCurrentDate(addMonths(currentDate, 1))}>
-            <IoIosArrowForward />
-          </Button>
-          <Button
-            onClick={() => handleShowModal("add")}
-            className={"bg-blue-500 text-white px-3 py-1 rounded-sm"}
-          >
-            Add
-          </Button>
+        <div className="flex-1/7 flex justify-between">
+          <div className="flex items-center gap-2">
+            <Button onClick={() => setCurrentDate(subMonths(currentDate, 1))}>
+              <IoIosArrowBack />
+            </Button>
+            <Button
+              className={"px-3 py-1 bg-blue-500 rounded-sm text-white"}
+              onClick={() => setCurrentDate(new Date())}
+            >
+              Today
+            </Button>
+            <Button onClick={() => setCurrentDate(addMonths(currentDate, 1))}>
+              <IoIosArrowForward />
+            </Button>
+          </div>
 
-          {updatedEvents.length > 0 && (
-            <>
-              <Button
-                className={"px-3 py-1 bg-green-500 rounded-sm text-white"}
-                onClick={handleSave}
-              >
-                Save
-              </Button>
-              <Button
-                className={"px-3 py-1 bg-gray-300 rounded-sm "}
-                onClick={handleCancel}
-              >
-                Cancel
-              </Button>
-            </>
-          )}
+          <div className="space-x-1.5">
+            <Button
+              className={"px-3 py-1 bg-green-500 rounded-sm text-white"}
+              onClick={() =>
+                handleSave(
+                  updatedEvents,
+                  handleServiceWithOnClick,
+                  setUpdatedEvents
+                )
+              }
+            >
+              Save
+            </Button>
+            <Button
+              className={"px-3 py-1 bg-gray-300 rounded-sm "}
+              onClick={() => () =>
+                handleCancel(setEvents, originalEvents, setUpdatedEvents)}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </div>
       <table className="w-full border-collapse border border-gray-300">
@@ -89,7 +98,15 @@ const Calendar = ({
                       : ""
                   }`}
                   onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => handleDrop(date)}
+                  onDrop={() =>
+                    handleDrop(
+                      date,
+                      draggedEvent,
+                      setEvents,
+                      setUpdatedEvents,
+                      setDraggedEvent
+                    )
+                  }
                 >
                   <div
                     className={`text-sm w-full flex justify-end font-bold p-1 `}
@@ -106,10 +123,12 @@ const Calendar = ({
                     <EventLabel
                       events={events}
                       isEventOnDate={isEventOnDate}
-                      handleShowModal={handleShowModal}
+                      handleShowSidebar={stateShowSidebar.handleShow}
                       normalizeDate={normalizeDate}
                       date={date}
-                      handleDragStart={handleDragStart}
+                      handleDragStart={(index) =>
+                        handleDragStart(index, events, setDraggedEvent)
+                      }
                     />
                   </div>
                 </td>
@@ -118,25 +137,30 @@ const Calendar = ({
           ))}
         </tbody>
       </table>
-      <ModalLayout
-        isModalOpen={isModalOpen}
-        handleShowModal={handleShowModal}
+
+      <Sidebar
+        isShow={stateShowSidebar.isShow}
+        type="form"
+        slide
+        position={"right-0"}
         submitType={submitType}
-        title={submitType === "add" ? "Add Banner" : "Edit Banner"}
+        dataDefault={dataEvent}
+        title={submitType === "add" ? "Add Event" : "Update Event"}
+        inputForm={inputForm}
+        handleShow={stateShowSidebar.handleShow}
+        handleOpenModal={stateShowModal.handleOpenModal}
+        handleService={(datas) => handleService(datas, { setUpdatedEvents })}
+      />
+
+      <ModalLayout
+        isModalOpen={stateShowModal?.isShow}
+        handleCloseModal={stateShowModal?.handleCloseModal}
       >
-        {submitType !== "delete" ? (
-          <Form
-            configInput={inputForm}
-            buttonText={"Submit"}
-            handleSubmitData={handleService}
-          />
-        ) : (
-          <ConfirmDelete
-            handleCloseModal={handleShowModal}
-            dataRow={dataEvent}
-            onConfirm={handleService}
-          />
-        )}
+        <ConfirmDelete
+          onConfirm={handleServiceWithOnClick}
+          handleCloseModal={stateShowModal.handleCloseModal}
+          dataRow={dataEvent}
+        />
       </ModalLayout>
     </div>
   );

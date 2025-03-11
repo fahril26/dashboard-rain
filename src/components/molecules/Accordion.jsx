@@ -1,6 +1,5 @@
-import { lazy, useState } from "react";
-
-const Navlink = lazy(() => import("./Navlink"));
+import { useState } from "react";
+import Navlink from "./Navlink";
 
 const Accordion = ({ submenus, config, currentPath }) => {
   const [active, setActive] = useState(false);
@@ -13,7 +12,7 @@ const Accordion = ({ submenus, config, currentPath }) => {
     <li>
       <button
         onClick={handleToggle}
-        className="w-full hover:bg-blue-700 cursor-pointer text-white text-lg flex justify-between items-center p-2 rounded-md"
+        className="w-full hover:bg-blue-700 cursor-pointer text-white flex justify-between items-center p-2 rounded-md"
       >
         <div className="flex gap-2 items-center">
           {config.icon && <config.icon />}
@@ -42,7 +41,9 @@ const Accordion = ({ submenus, config, currentPath }) => {
         links={submenus}
         currentPath={currentPath}
         className={`pl-4 space-y-2 mt-2 transition-all duration-300 ease-in-out  ${
-          active ? "translate-y-0 opacity-100" : "-translate-y-2.5 opacity-0"
+          active
+            ? "translate-y-0 opacity-100 pointer-events-auto"
+            : "opacity-0 -translate-y-2.5 pointer-events-none"
         }`}
       />
     </li>

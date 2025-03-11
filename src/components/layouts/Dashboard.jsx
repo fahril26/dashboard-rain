@@ -4,47 +4,14 @@ import { Sidebar, Topbar } from "../molecules";
 const Dashboard = () => {
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar position={"left-0"} />
 
-      <main className=" w-full h-screen overflow-y-auto">
+      <main className=" w-full h-screen overflow-y-auto bg-gray-100">
         <Topbar />
         <div className="p-6">
           <Outlet />
         </div>
       </main>
-
-      <div
-        id="mobile-sidebar"
-        className=" fixed inset-0 bg-blue-600 text-white p-4 transform -translate-x-full transition-transform duration-300"
-      >
-        <ul>
-          <li className="mb-4">
-            <a href="#" className="hover:bg-blue-700 p-2 rounded">
-              Beranda
-            </a>
-          </li>
-          <li className="mb-4">
-            <a href="#" className="hover:bg-blue-700 p-2 rounded">
-              Laporan
-            </a>
-          </li>
-          <li className="mb-4">
-            <a href="#" className="hover:bg-blue-700 p-2 rounded">
-              Pengaturan
-            </a>
-          </li>
-          <li className="mb-4">
-            <a href="#" className="hover:bg-blue-700 p-2 rounded">
-              Profil
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:bg-blue-700 p-2 rounded">
-              Logout
-            </a>
-          </li>
-        </ul>
-      </div>
     </div>
   );
 };

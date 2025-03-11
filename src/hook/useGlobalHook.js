@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 
 export const useGlobalHook = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [refreshData, setRefreshData] = useState(true);
   const [submitType, setSubmitType] = useState(null);
   const [dataRow, setDataRow] = useState({});
@@ -21,17 +22,40 @@ export const useGlobalHook = () => {
     setIsModalOpen(false);
   };
 
+  const handleOpenSidebar = (type, dataDefault) => {
+    if (dataDefault) {
+      setDataRow(dataDefault);
+    }
+
+    setSubmitType(type);
+    setIsSidebarOpen(true);
+  };
+
+  const handleCloseSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   return {
-    isModalOpen,
-    setIsModalOpen,
     refreshData,
     setRefreshData,
     accessToken,
-    handleOpenModal,
-    handleCloseModal,
+    isModalOpen,
     submitType,
     setSubmitType,
+    handleCloseModal,
+    handleOpenModal,
+    handleOpenSidebar,
+    handleCloseSidebar,
     dataRow,
     setDataRow,
+    stateShowModal: {
+      isShow: isModalOpen,
+      handleOpenModal,
+      handleCloseModal,
+    },
+    stateShowSidebar: {
+      isShow: isSidebarOpen,
+      handleShow: isSidebarOpen ? handleCloseSidebar : handleOpenSidebar,
+    },
   };
 };

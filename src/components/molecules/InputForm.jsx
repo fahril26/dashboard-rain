@@ -41,7 +41,7 @@ const InputForm = ({ config, register, watch, error }) => {
               <select
                 {...register(data.name, data.optionError)}
                 id={data.name}
-                defaultValue={""}
+                defaultValue={false}
                 className="peer w-40 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 bg-white"
               >
                 <option value="" disabled>
@@ -55,7 +55,7 @@ const InputForm = ({ config, register, watch, error }) => {
               </select>
             ) : data.type === "file" ? (
               <div className="flex flex-col ">
-                <div className="relative w-40 h-40 border border-gray-300 rounded-md overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer hover:border-blue-500 transition-all">
+                <div className="relative w-48 h-48 border border-gray-300 rounded-md overflow-hidden bg-gray-100 flex items-center justify-center cursor-pointer hover:border-blue-500 transition-all">
                   {imagePreview && (
                     <img
                       src={imagePreview}

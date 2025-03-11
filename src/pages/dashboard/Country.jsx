@@ -1,11 +1,17 @@
 import { HeaderContent } from "../../components/molecules";
 import {
   configTableCountry,
+  handleSubmitData,
   inputAddCountry,
   inputEditCountry,
 } from "../../pattern";
 import { useCountryHook } from "../../hook";
 import { Table } from "../../components/organism";
+import {
+  addCountryService,
+  deleteCountryService,
+  updateCountryService,
+} from "../../service";
 
 const Country = () => {
   const {
@@ -13,16 +19,39 @@ const Country = () => {
     isModalOpen,
     submitType,
     dataRow,
+    accessToken,
+    setRefreshData,
     handleOpenModal,
     handleCloseModal,
-    handleAddCountry,
-    handleEditCountry,
-    handleDeleteCountry,
   } = useCountryHook();
+
+  const handleAddCountry = (datas) => {
+    handleSubmitData(datas, addCountryService, {
+      accessToken,
+      setRefreshData,
+      handleCloseModal,
+    });
+  };
+
+  const handleEditCountry = (datas) => {
+    handleSubmitData({ ...datas, id: dataRow.id }, updateCountryService, {
+      accessToken,
+      setRefreshData,
+      handleCloseModal,
+    });
+  };
+
+  const handleDeleteCountry = (datas) => {
+    deleteCountryService(datas.id, {
+      accessToken,
+      setRefreshData,
+      handleCloseModal,
+    });
+  };
 
   return (
     <>
-      <HeaderContent title={"Country"} />
+      <HeaderContent title={"Country"} handleOpen={handleOpenModal} />
 
       <Table
         datasTable={datasCountry}

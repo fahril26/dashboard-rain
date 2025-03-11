@@ -1,12 +1,6 @@
 import { useEffect, useState } from "react";
 import { useGlobalHook } from "../useGlobalHook";
-import { handleSubmitData } from "../../pattern";
-import {
-  addCountryService,
-  deleteCountryService,
-  getCountryService,
-  updateCountryService,
-} from "../../service";
+import { getCountryService } from "../../service";
 
 export const useCountryHook = () => {
   const [datasCountry, setDatasCountry] = useState([]);
@@ -21,30 +15,6 @@ export const useCountryHook = () => {
     dataRow,
   } = useGlobalHook();
 
-  const handleAddCountry = (datas) => {
-    handleSubmitData(datas, addCountryService, {
-      accessToken,
-      setRefreshData,
-      handleCloseModal,
-    });
-  };
-
-  const handleEditCountry = (datas) => {
-    handleSubmitData({ ...datas, id: dataRow.id }, updateCountryService, {
-      accessToken,
-      setRefreshData,
-      handleCloseModal,
-    });
-  };
-
-  const handleDeleteCountry = (datas) => {
-    deleteCountryService(datas.id, {
-      accessToken,
-      setRefreshData,
-      handleCloseModal,
-    });
-  };
-
   useEffect(() => {
     getCountryService(accessToken, {
       setDatasCountry,
@@ -58,10 +28,9 @@ export const useCountryHook = () => {
     isModalOpen,
     submitType,
     dataRow,
+    accessToken,
+    setRefreshData,
     handleOpenModal,
     handleCloseModal,
-    handleAddCountry,
-    handleEditCountry,
-    handleDeleteCountry,
   };
 };
