@@ -1,28 +1,30 @@
+import { errorOptions } from "../error";
+
 export const inputAddFilms = [
   {
     labelText: "Title Film",
     name: "nama_film",
     type: "text",
-    // optionError: errorOptions.name_country,
+    optionError: errorOptions.title_film,
   },
   {
     labelText: "Sinopsis Film",
     name: "sinopsis_film_id",
     type: "text",
-    // optionError: errorOptions.code_country,
+    optionError: errorOptions.sinopsis_film,
   },
   {
     labelText: "Trailer Film",
     name: "trailer_film",
     type: "text",
-    // optionError: errorOptions.code_country,
+    optionError: errorOptions.url,
   },
 
   {
     labelText: "Poster Film",
     name: "poster_film",
     type: "file",
-    // optionError: errorOptions.code_country,
+    optionError: errorOptions.img,
   },
 ];
 
@@ -32,21 +34,21 @@ export const inputEditFilms = (datasDefault) => [
     name: "nama_film",
     type: "text",
     defaultValue: datasDefault.nama_film,
-    // optionError: errorOptions.name_country,
+    optionError: errorOptions.title_film,
   },
   {
     labelText: "Sinopsis Film",
     name: "sinopsis_film_id",
     type: "text",
     defaultValue: datasDefault.sinopsis_film_id,
-    // optionError: errorOptions.code_country,
+    optionError: errorOptions.sinopsis_film,
   },
   {
     labelText: "Trailer Film",
     name: "trailer_film",
     type: "text",
     defaultValue: datasDefault.trailer_film,
-    // optionError: errorOptions.code_country,
+    optionError: errorOptions.url,
   },
   {
     labelText: "Poster Film",
@@ -54,7 +56,6 @@ export const inputEditFilms = (datasDefault) => [
     type: "file",
     tableImg: "films",
     defaultValue: datasDefault.poster_film,
-    // optionError: errorOptions.code_country,
   },
   {
     name: "status",

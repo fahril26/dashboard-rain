@@ -31,6 +31,32 @@ export const errorOptions = {
     },
   },
 
+  title_film: {
+    required: "Title Film is Required",
+    minLength: {
+      value: 4,
+      message: "Title Film must be at least 4 characters",
+    },
+  },
+
+  sinopsis_film: {
+    required: "Sinopsis Film is Required",
+    minLength: {
+      value: 6,
+      message: "Sinopsis Film must be at least 6 characters",
+    },
+  },
+
+  url: {
+    required: "Url is Required",
+
+    pattern: {
+      value:
+        /^(https?:\/\/)?([\w\-]+\.)+[\w-]+(\/[\w\-._~:/?#[\]@!$&'()*+,;=]*)?$/,
+      message: "Format link tidak valid",
+    },
+  },
+
   name_banner: {
     required: "Name Banner is Required",
     minLength: {

@@ -77,7 +77,7 @@ const Calendar = ({
               </Button>
               <Button
                 className={"px-3 py-1 bg-gray-300 rounded-sm "}
-                onClick={() => () => {
+                onClick={() => {
                   if (updatedEvents.length > 0) {
                     handleCancel(setEvents, originalEvents, setUpdatedEvents);
                   }

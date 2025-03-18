@@ -8,7 +8,7 @@ const InputTable = ({ configTable, handleSearch }) => {
             type="text"
             placeholder={data.title}
             onChange={(e) => handleSearch(e.target.value, data.key)}
-            className="border border-gray-400 rounded-md py-2 px-3 outline-none w-full  text-xs"
+            className="border border-gray-400 rounded-md py-2 px-3 outline-none w-full placeholder:text-black text-xs"
           />
         ) : data.type === "select" ? (
           <select
