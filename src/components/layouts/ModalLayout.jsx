@@ -5,7 +5,9 @@ const ModalLayout = ({
   title,
   isModalOpen,
   closeButton,
+  description,
   className,
+  submitType,
   children,
   handleCloseModal,
 }) => {
@@ -19,14 +21,24 @@ const ModalLayout = ({
           ></div>
           <div className="flex justify-center items-center h-full">
             <div
-              className={`bg-white rounded-sm p-5 w-[500px] ${className} z-10 `}
+              className={`bg-white rounded-sm p-5 ${
+                submitType === "location" ? "w-[1000px]" : "w-[500px]"
+              } ${className} z-10 `}
             >
               {closeButton && (
-                <div className="mb-8 flex justify-between">
-                  <h3 className="text-xl font-semibold">{title}</h3>
-                  <Button onClick={handleCloseModal}>
-                    <IoClose />
-                  </Button>
+                <div className="mb-5 flex justify-between">
+                  <div className="space-y-1">
+                    <h3 className="text-xl font-semibold">{title}</h3>
+                    {description && (
+                      <span className="text-gray-600">{description}</span>
+                    )}
+                  </div>
+
+                  <div>
+                    <Button onClick={handleCloseModal} className={"text-2xl"}>
+                      <IoClose />
+                    </Button>
+                  </div>
                 </div>
               )}
 

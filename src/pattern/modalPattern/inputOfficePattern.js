@@ -73,7 +73,7 @@ export const inputEditOffice = (defaultValues, options) => {
       name: "office_name",
       type: "text",
       optionError: errorOptions.name_office,
-      defaultValue: defaultValues.name,
+      defaultValue: defaultValues.office_name,
     },
     {
       labelText: "Address",

@@ -2,6 +2,7 @@ import { HeaderContent } from "../../components/molecules";
 import { Table } from "../../components/organism";
 import {
   configTableOffice,
+  handleSearch,
   inputAddOffice,
   inputEditOffice,
 } from "../../pattern";
@@ -17,6 +18,7 @@ const Office = () => {
     stateShowModal,
     dataRow,
     submitType,
+    setSearchQuery,
     datasOffice,
     optionsSelect,
     extraOptions,
@@ -31,6 +33,7 @@ const Office = () => {
         dataRow={dataRow}
         configTable={configTableOffice}
         stateShowModal={stateShowModal}
+        handleSearch={handleSearch(setSearchQuery)}
         inputForm={
           submitType === "add"
             ? inputAddOffice(optionsSelect)

@@ -1,15 +1,17 @@
 import { DELETE, GET, POST, PUT } from "../../api";
-import { generateHeaders } from "../generateHeaders";
+import { generateHeaders, generateEndpointWithQuery } from "../";
 
 export const getOfficeService = async (accessToken, extraOptions) => {
-  const { setDatasOffice, setRefreshData } = extraOptions;
+  const { setDatasOffice, setRefreshData, searchQuery } = extraOptions;
+
+  const paramsQuery = generateEndpointWithQuery(searchQuery);
 
   try {
-    const response = await GET("crud/office", accessToken);
+    const response = await GET(`crud/office/by?${paramsQuery}`, accessToken);
 
     const parsing = response.data.payload.map((data) => ({
       id: data.id_office,
-      name: data.office_name,
+      office_name: data.office_name,
       id_city: data.id_city,
       city_name: data.created_city_office?.city_name || "-",
       status: data.status,

@@ -11,6 +11,7 @@ import ConfirmDelete from "./ConfirmDelete";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import Navlink from "./Navlink";
+import Leaflet from "./Leaflet";
 
 export {
   Form,
@@ -21,6 +22,7 @@ export {
   Breadcrumb,
   Accordion,
   HeaderContent,
+  Leaflet,
   EventLabel,
   ConfirmDelete,
   TableHead,

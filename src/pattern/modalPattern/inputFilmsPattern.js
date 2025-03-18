@@ -31,21 +31,21 @@ export const inputEditFilms = (datasDefault) => [
     labelText: "Title Film",
     name: "nama_film",
     type: "text",
-    defaultValue: datasDefault.title,
+    defaultValue: datasDefault.nama_film,
     // optionError: errorOptions.name_country,
   },
   {
     labelText: "Sinopsis Film",
     name: "sinopsis_film_id",
     type: "text",
-    defaultValue: datasDefault.sinopsis,
+    defaultValue: datasDefault.sinopsis_film_id,
     // optionError: errorOptions.code_country,
   },
   {
     labelText: "Trailer Film",
     name: "trailer_film",
     type: "text",
-    defaultValue: datasDefault.trailer,
+    defaultValue: datasDefault.trailer_film,
     // optionError: errorOptions.code_country,
   },
   {
@@ -53,7 +53,7 @@ export const inputEditFilms = (datasDefault) => [
     name: "poster_film",
     type: "file",
     tableImg: "films",
-    defaultValue: datasDefault.poster,
+    defaultValue: datasDefault.poster_film,
     // optionError: errorOptions.code_country,
   },
   {

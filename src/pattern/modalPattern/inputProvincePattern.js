@@ -21,6 +21,7 @@ export const inputAddProvince = (options) => [
     labelText: "Name Country",
     optionDisabledText: "Select Country",
     options,
+    grid: 6,
     optionError: errorOptions.select_country,
   },
 ];
@@ -31,14 +32,14 @@ export const inputEditProvince = (defaultValues, options) => {
       labelText: "Province Name",
       name: "province_name",
       type: "text",
-      defaultValue: defaultValues.name,
+      defaultValue: defaultValues.province_name,
       optionError: errorOptions.name_province,
     },
     {
       labelText: "Province Code",
       name: "province_code",
       type: "text",
-      defaultValue: defaultValues.code,
+      defaultValue: defaultValues.province_code,
       optionError: errorOptions.code_province,
     },
     {
@@ -48,6 +49,7 @@ export const inputEditProvince = (defaultValues, options) => {
       optionDisabledText: "Select Country",
       defaultValue: defaultValues.country_id,
       options,
+      grid: 6,
       optionError: errorOptions.select_country,
     },
     {
@@ -56,7 +58,7 @@ export const inputEditProvince = (defaultValues, options) => {
       labelText: "Status",
       optionDisabledText: "Select Status",
       defaultValue: defaultValues.status,
-      grid: 4,
+      grid: 6,
       options: [
         { label: "Active", value: true },
         { label: "Inactive", value: false },

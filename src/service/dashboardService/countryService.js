@@ -1,6 +1,5 @@
 import { DELETE, GET, POST, PUT } from "../../api";
-import { generateEndpointWithQuery } from "../generateEndpointWithQuery";
-import { generateHeaders } from "../generateHeaders";
+import { generateHeaders, generateEndpointWithQuery } from "../";
 
 export const getCountryService = async (accessToken, extraOptions) => {
   const { setDatasCountry, setRefreshData, searchQuery } = extraOptions;

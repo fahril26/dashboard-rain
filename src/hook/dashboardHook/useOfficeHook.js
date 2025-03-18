@@ -11,6 +11,8 @@ export const useOfficeHook = () => {
     stateShowModal,
     handleCloseModal,
     dataRow,
+    searchQuery,
+    setSearchQuery,
     submitType,
   } = useGlobalHook();
   const [datasOffice, setDatasOffice] = useState([]);
@@ -18,20 +20,31 @@ export const useOfficeHook = () => {
 
   const optionsSelect = datasCity.map((data) => ({
     value: data.id,
-    label: data.name,
+    label: data.city_name,
   }));
   const extraOptions = { accessToken, setRefreshData, handleCloseModal };
 
   useEffect(() => {
-    getOfficeService(accessToken, {
-      setDatasOffice,
-      setRefreshData,
-      handleCloseModal,
-    });
-  }, [refreshData]);
+    const fetchData = () => {
+      getOfficeService(accessToken, {
+        searchQuery,
+        setDatasOffice,
+        setRefreshData,
+        handleCloseModal,
+      });
+    };
+
+    if (Object.keys(searchQuery).length > 0) {
+      const timeout = setTimeout(fetchData, 300);
+      return () => clearTimeout(timeout);
+    } else {
+      fetchData();
+    }
+  }, [refreshData, searchQuery]);
 
   useDataSub(getCityService, {
     accessToken,
+    searchQuery: {},
     submitType,
     setDatasCity,
   });
@@ -41,6 +54,7 @@ export const useOfficeHook = () => {
     refreshData,
     setRefreshData,
     stateShowModal,
+    setSearchQuery,
     dataRow,
     submitType,
     datasOffice,

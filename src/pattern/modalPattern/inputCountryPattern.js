@@ -21,14 +21,14 @@ export const inputEditCountry = (defaultValues) => {
       labelText: "Country Name",
       name: "country_name",
       type: "text",
-      defaultValue: defaultValues.name,
+      defaultValue: defaultValues.country_name,
       optionError: errorOptions.name_country,
     },
     {
       labelText: "Country Code",
       name: "country_code",
       type: "text",
-      defaultValue: defaultValues.code,
+      defaultValue: defaultValues.country_code,
       optionError: errorOptions.code_country,
     },
     {

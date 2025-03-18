@@ -1,16 +1,18 @@
 import { DELETE, GET, POST, PUT } from "../../api";
+import { generateEndpointWithQuery } from "../generateEndpointWithQuery";
 import { generateHeaders } from "../generateHeaders";
 
 export const getProvinceService = async (accessToken, extraOptions) => {
-  const { setDatasProvince, setRefreshData } = extraOptions;
+  const { setDatasProvince, setRefreshData, searchQuery } = extraOptions;
+  const queryParams = generateEndpointWithQuery(searchQuery);
 
   try {
-    const response = await GET("crud/province", accessToken);
+    const response = await GET(`crud/province/by?${queryParams}`, accessToken);
 
     const parsing = response.data.payload.map((data) => ({
       id: data.id_province,
-      name: data.province_name,
-      code: data.province_code,
+      province_name: data.province_name,
+      province_code: data.province_code,
       country_id: data.id_country,
       country_name: data.created_province_country?.country_name || "-",
       status: data.status,

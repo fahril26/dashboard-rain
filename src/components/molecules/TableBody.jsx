@@ -1,8 +1,8 @@
 import { formatDate } from "date-fns";
 import { Button } from "../atom";
-import { FaRegEdit } from "react-icons/fa";
+import { FaEye, FaRegEdit } from "react-icons/fa";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const TableBody = ({
   datasTable,
@@ -11,6 +11,8 @@ const TableBody = ({
   handleShowModal,
   handleShowSidebar,
 }) => {
+  const pathname = useLocation().pathname;
+
   return (
     <tbody className="">
       {datasTable.length > 0 ? (
@@ -61,7 +63,16 @@ const TableBody = ({
               </td>
             ))}
             <td>
-              <div className="flex justify-center py-3 gap-3">
+              <div className="flex justify-center p-4 gap-3">
+                {pathname === "/office" && (
+                  <Button
+                    className={"text-2xl text-violet-600"}
+                    onClick={() => handleShowModal("location", data)}
+                  >
+                    <FaEye />
+                  </Button>
+                )}
+
                 <Button
                   className={"text-2xl"}
                   onClick={() => {

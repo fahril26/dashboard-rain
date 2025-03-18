@@ -1,7 +1,12 @@
 import { HeaderContent } from "../../components/molecules";
 import { Table } from "../../components/organism";
 import { useCityHook } from "../../hook";
-import { configTableCity, inputAddCity, inputEditCity } from "../../pattern";
+import {
+  configTableCity,
+  handleSearch,
+  inputAddCity,
+  inputEditCity,
+} from "../../pattern";
 import { handleAddCity, handleDeleteCity, handleEditCity } from "../../service";
 
 const City = () => {
@@ -9,6 +14,7 @@ const City = () => {
     datasCity,
     stateShowModal,
     extraOptions,
+    setSearchQuery,
     optionsSelect,
     submitType,
     dataRow,
@@ -23,6 +29,7 @@ const City = () => {
         dataRow={dataRow}
         configTable={configTableCity}
         stateShowModal={stateShowModal}
+        handleSearch={handleSearch(setSearchQuery)}
         inputForm={
           submitType === "add"
             ? inputAddCity(optionsSelect)

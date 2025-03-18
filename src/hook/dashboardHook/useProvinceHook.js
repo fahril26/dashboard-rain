@@ -11,6 +11,8 @@ export const useProvinceHook = () => {
     submitType,
     handleCloseModal,
     dataRow,
+    searchQuery,
+    setSearchQuery,
     stateShowModal,
   } = useGlobalHook();
   const [datasProvince, setDatasProvince] = useState([]);
@@ -19,25 +21,37 @@ export const useProvinceHook = () => {
   const extraOptions = { accessToken, setRefreshData, handleCloseModal };
   const optionsSelect = datasCountry.map((data) => ({
     value: data.id,
-    label: data.name,
+    label: data.country_name,
   }));
 
   useDataSub(getCountryService, {
     accessToken,
+    searchQuery: {},
     submitType,
     setDatasCountry,
   });
 
   useEffect(() => {
-    getProvinceService(accessToken, {
-      setDatasProvince,
-      setRefreshData,
-    });
-  }, [refreshData, datasCountry]);
+    const fetchData = () => {
+      getProvinceService(accessToken, {
+        searchQuery,
+        setDatasProvince,
+        setRefreshData,
+      });
+    };
+
+    if (Object.keys(searchQuery).length > 0) {
+      const timeout = setTimeout(fetchData, 300);
+      return () => clearTimeout(timeout);
+    } else {
+      fetchData();
+    }
+  }, [refreshData, datasCountry, searchQuery]);
 
   return {
     datasProvince,
     optionsSelect,
+    setSearchQuery,
     submitType,
     dataRow,
     stateShowModal,

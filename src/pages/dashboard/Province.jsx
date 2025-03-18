@@ -7,6 +7,7 @@ import { useProvinceHook } from "../../hook";
 import { Table } from "../../components/organism";
 import {
   configTableProvince,
+  handleSearch,
   inputAddProvince,
   inputEditProvince,
 } from "../../pattern";
@@ -19,6 +20,7 @@ const Province = () => {
     submitType,
     extraOptions,
     dataRow,
+    setSearchQuery,
     stateShowModal,
   } = useProvinceHook();
 
@@ -33,6 +35,7 @@ const Province = () => {
         dataRow={dataRow}
         configTable={configTableProvince}
         stateShowModal={stateShowModal}
+        handleSearch={handleSearch(setSearchQuery)}
         inputForm={
           submitType === "add"
             ? inputAddProvince(optionsSelect)

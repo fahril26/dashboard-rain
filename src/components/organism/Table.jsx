@@ -3,6 +3,7 @@ import {
   ConfirmDelete,
   Form,
   InputTable,
+  Leaflet,
   Sidebar,
   TableBody,
   TableHead,
@@ -57,22 +58,34 @@ const Table = ({
           isModalOpen={stateShowModal?.isShow}
           handleCloseModal={stateShowModal?.handleShow}
           submitType={submitType}
-          title={submitType === "add" ? "Create" : "Update"}
+          description={submitType === "location" ? dataRow.address : null}
+          title={
+            submitType === "add"
+              ? "Create"
+              : submitType === "location"
+              ? "Location"
+              : "Update"
+          }
           closeButton={submitType !== "delete"}
         >
-          {submitType !== "delete" ? (
+          {submitType == "add" || submitType === "edit" ? (
             <Form
               configInput={inputForm}
               buttonText={"Submit"}
               handleSubmitData={handleService}
             />
-          ) : (
+          ) : submitType === "location" ? (
+            <Leaflet
+              latitude={dataRow.latitude}
+              longitude={dataRow.longitude}
+            />
+          ) : submitType === "delete" ? (
             <ConfirmDelete
               handleCloseModal={stateShowModal?.handleShow}
               dataRow={{ ...dataRow, title: dataRow.name || dataRow.title }}
               onConfirm={handleService}
             />
-          )}
+          ) : null}
         </ModalLayout>
       </div>
     </div>

@@ -144,14 +144,14 @@ export const errorOptions = {
   longitute: {
     required: "Longitute is Required",
     pattern: {
-      value: /^[0-9]+$/,
+      value: /^-?\d+(\.\d+)?$/,
       message: "Hanya boleh angka",
     },
   },
   latitude: {
     required: "Latitude is Required",
     pattern: {
-      value: /^[0-9]+$/,
+      value: /^-?\d+(\.\d+)?$/,
       message: "Hanya boleh angka",
     },
   },
