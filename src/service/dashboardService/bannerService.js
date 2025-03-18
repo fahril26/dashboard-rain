@@ -1,9 +1,10 @@
 import { DELETE, GET, POST, PUT } from "../../api";
+import { generateHeaders } from "../generateHeaders";
 
 export const getBannerService = async (accessToken, extraOptions) => {
   const { setDataBanner, setRefreshData } = extraOptions;
   try {
-    const response = await GET("/crud/banner", accessToken);
+    const response = await GET("crud/banner", accessToken);
     const parsing = response.data.payload.map((data) => ({
       id: data.id_banner,
       startDate: data.start_date_banner,
@@ -25,10 +26,11 @@ export const getBannerService = async (accessToken, extraOptions) => {
 
 export const addBannerService = async (datas, extraOptions) => {
   const { accessToken, handleCloseSidebar, setRefreshData } = extraOptions;
-  const headers = {
-    "Content-Type": "multipart/form-data",
-    "x-access-token": `mktech ${accessToken}`,
-  };
+
+  const headers = generateHeaders({
+    accessToken,
+    contentType: "multipart/form-data",
+  });
 
   try {
     const response = await POST(
@@ -50,22 +52,17 @@ export const addBannerService = async (datas, extraOptions) => {
 };
 
 export const updateBannerService = async (datas, extraOptions) => {
-  const {
+  const { accessToken, handleCloseSidebar, setRefreshData, setUpdatedEvents } =
+    extraOptions;
+
+  const headers = generateHeaders({
     accessToken,
-    handleCloseSidebar,
-    setRefreshData,
-    typeUpdate,
-    setUpdatedEvents,
-  } = extraOptions;
+    contentType: "multipart/form-data,",
+  });
 
-  const headers = {
-    "Content-Type": `${
-      typeUpdate === "schadule" ? "application/json" : "multipart/form-data"
-    }`,
-    "x-access-token": `mktech ${accessToken}`,
+  const updateBanner = async (datas) => {
+    return await PUT(`crud/banner`, datas, headers);
   };
-
-  const updateBanner = async (datas) => PUT(`crud/banner`, datas, headers);
 
   try {
     if (Array.isArray(datas)) {
@@ -104,6 +101,7 @@ export const updateBannerService = async (datas, extraOptions) => {
     }
   } catch (error) {
     console.error("Update Failed:", error);
+    alert(error.response.data.message);
     throw error;
   }
 };

@@ -1,20 +1,30 @@
 import { DELETE, GET, POST, PUT } from "../../api";
+import { generateEndpointWithQuery } from "../generateEndpointWithQuery";
+import { generateHeaders } from "../generateHeaders";
 
 export const getCountryService = async (accessToken, extraOptions) => {
-  const { setDatasCountry, setRefreshData } = extraOptions;
+  const { setDatasCountry, setRefreshData, searchQuery } = extraOptions;
+
+  const queryParams = generateEndpointWithQuery(searchQuery);
+
   try {
-    const response = await GET("/crud/country", accessToken);
+    const response = await GET(`crud/country/by?${queryParams}`, accessToken);
 
-    const parsing = response.data.payload.map((data) => ({
-      id: data.id_country,
-      name: data.country_name,
-      code: data.country_code,
-      username: data.created_country.user_name,
-    }));
+    const parsing = response.data.payload.map((data) => {
+      return {
+        id: data.id_country,
+        country_name: data.country_name,
+        country_code: data.country_code,
+        username: data.created_country.user_name,
+        status: data.status,
+      };
+    });
 
-    setDatasCountry(parsing);
-    setRefreshData(true);
     console.log(response);
+    setDatasCountry(parsing);
+    if (setRefreshData) {
+      setRefreshData(true);
+    }
   } catch (error) {
     console.error(error);
   }
@@ -22,10 +32,7 @@ export const getCountryService = async (accessToken, extraOptions) => {
 
 export const addCountryService = async (datas, extraOptions) => {
   const { accessToken, setRefreshData, handleCloseModal } = extraOptions;
-  const headers = {
-    "Content-Type": "application/json",
-    "x-access-token": `mktech ${accessToken}`,
-  };
+  const headers = generateHeaders({ accessToken });
   try {
     const response = await POST("crud/country", datas, headers);
     console.log(response);
@@ -42,10 +49,7 @@ export const addCountryService = async (datas, extraOptions) => {
 
 export const updateCountryService = async (datas, extraOptions) => {
   const { accessToken, setRefreshData, handleCloseModal } = extraOptions;
-  const headers = {
-    "Content-Type": "application/json",
-    "x-access-token": `mktech ${accessToken}`,
-  };
+  const headers = generateHeaders({ accessToken });
   try {
     const response = await PUT("crud/country", datas, headers);
     console.log(response);

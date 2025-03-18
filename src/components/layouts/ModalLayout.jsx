@@ -5,6 +5,7 @@ const ModalLayout = ({
   title,
   isModalOpen,
   closeButton,
+  className,
   children,
   handleCloseModal,
 }) => {
@@ -17,9 +18,11 @@ const ModalLayout = ({
             onClick={handleCloseModal}
           ></div>
           <div className="flex justify-center items-center h-full">
-            <div className={`bg-white rounded-sm p-5 w-[500px] z-10`}>
+            <div
+              className={`bg-white rounded-sm p-5 w-[500px] ${className} z-10 `}
+            >
               {closeButton && (
-                <div className="mb-10 flex justify-between">
+                <div className="mb-8 flex justify-between">
                   <h3 className="text-xl font-semibold">{title}</h3>
                   <Button onClick={handleCloseModal}>
                     <IoClose />

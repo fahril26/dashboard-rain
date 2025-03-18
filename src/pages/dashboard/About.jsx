@@ -1,44 +1,115 @@
-import { HeaderContent } from "../../components/molecules";
+import { ConfirmDelete, Form, HeaderContent } from "../../components/molecules";
+import {
+  handleAddAbout,
+  handleDeleteAbout,
+  handleEditAbout,
+} from "../../service";
+import { CardLayout, ModalLayout } from "../../components/layouts";
+import { FaRegEdit, FaRegTrashAlt } from "react-icons/fa";
+import { inputAddAbout, inputEditAbout } from "../../pattern";
+import { useAboutHook } from "../../hook";
 
 const About = () => {
+  const {
+    datasAbout,
+    isModalOpen,
+    submitType,
+    dataRow,
+    searchQuery,
+    setSearchQuery,
+    extraOptions,
+    handleOpenModal,
+    handleCloseModal,
+  } = useAboutHook();
+
   return (
     <>
-      <HeaderContent title={"About"} />
+      <HeaderContent title={"About"} handleOpen={handleOpenModal} />
 
-      <div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h4 className="text-lg font-semibold text-gray-700 mb-4">
-              Statistik Pengguna
-            </h4>
-            <p className="text-gray-500">
-              Terdapat 1.245 pengguna aktif saat ini.
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h4 className="text-lg font-semibold text-gray-700 mb-4">
-              Total Laporan
-            </h4>
-            <p className="text-gray-500">Jumlah laporan yang diterima: 45</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h4 className="text-lg font-semibold text-gray-700 mb-4">
-              Pengaturan Terbaru
-            </h4>
-            <p className="text-gray-500">
-              Pengaturan telah diperbarui pada 25 Februari 2025.
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h4 className="text-lg font-semibold text-gray-700 mb-4">
-              Pengaturan Terbaru
-            </h4>
-            <p className="text-gray-500">
-              Pengaturan telah diperbarui pada 25 Februari 2025.
-            </p>
-          </div>
-        </div>
+      <div className="flex flex-col gap-4">
+        {datasAbout.length === 0 ? (
+          <p className="text-gray-500 text-center">Tidak ada data.</p>
+        ) : (
+          datasAbout.map((data, index) => (
+            <div key={index}>
+              <CardLayout>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center justify-center space-x-2">
+                    <div
+                      className={`h-3 w-3 rounded-full ${
+                        data.status ? "bg-green-500 " : "bg-red-500"
+                      }`}
+                    />
+                    <h3 className="text-xl font-bold text-gray-700">
+                      {data.about_meta}
+                    </h3>
+                  </div>
+                  <div className="inline-flex space-x-2">
+                    <FaRegEdit
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenModal("edit", data);
+                      }}
+                      className="text-blue-500 text-xl cursor-pointer"
+                    />
+
+                    <FaRegTrashAlt
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenModal("delete", data);
+                      }}
+                      className="text-red-500 text-xl cursor-pointer"
+                    />
+                  </div>
+                </div>
+                <div className="flex mt-4 gap-4">
+                  {["about_body_en", "about_body_id"].map((lang, langIndex) => (
+                    <div
+                      className="bg-white flex-1 p-4 border border-gray-300 rounded-md"
+                      key={langIndex}
+                    >
+                      <h5 className="font-semibold mb-4 text-sm">
+                        Description{" "}
+                        {lang === "about_body_id" ? "(ID)" : "(ENG)"}
+                      </h5>
+
+                      <div dangerouslySetInnerHTML={{ __html: data[lang] }} />
+                    </div>
+                  ))}
+                </div>
+              </CardLayout>
+            </div>
+          ))
+        )}
       </div>
+
+      <ModalLayout
+        isModalOpen={isModalOpen}
+        className={`${submitType !== "delete" && "w-[1000px]"}`}
+        title={"Add About"}
+        handleCloseModal={handleCloseModal}
+        closeButton={submitType !== "delete"}
+      >
+        {submitType === "delete" ? (
+          <ConfirmDelete
+            dataRow={{ ...dataRow, title: dataRow.about_meta }}
+            handleCloseModal={handleCloseModal}
+            onConfirm={handleDeleteAbout(extraOptions, dataRow)}
+          />
+        ) : (
+          <Form
+            configInput={
+              submitType === "add" ? inputAddAbout : inputEditAbout(dataRow)
+            }
+            buttonText={"Submit"}
+            handleSubmitData={
+              submitType === "add"
+                ? handleAddAbout(extraOptions)
+                : handleEditAbout(extraOptions, dataRow)
+            }
+          />
+        )}
+      </ModalLayout>
     </>
   );
 };

@@ -1,18 +1,30 @@
 import Cookies from "js-cookie";
+import { Button } from "../atom";
+import { Link } from "react-router-dom";
+import { logoutService } from "../../service";
 
-const Topbar = () => {
+const Topbar = ({ handleShowSidebar }) => {
   const username = Cookies.get("username");
 
   return (
-    <div className="bg-white p-4 shadow-md flex justify-between items-center">
+    <div className="bg-white fixed md:static top-0 left-0 right-0 p-4 shadow-md flex justify-between items-center">
       <div className="text-gray-800">
         Welcome, <span className="font-bold">{username}</span>
       </div>
       <div className="flex space-x-4">
-        <button className="text-blue-600 hover:underline">Notification</button>
-        <button className="text-blue-600 hover:underline">Profile</button>
-
-        <button className="lg:hidden text-gray-800" id="hamburger-btn">
+        <Link to="/login" className="hidden lg:block">
+          <Button
+            onClick={() => logoutService()}
+            className="text-gray-800 hover:text-blue-500 "
+          >
+            Logout
+          </Button>
+        </Link>
+        <Button
+          className="lg:hidden text-gray-800"
+          id="hamburger-btn"
+          onClick={handleShowSidebar}
+        >
           <svg
             className="w-6 h-6"
             fill="none"
@@ -27,7 +39,7 @@ const Topbar = () => {
               d="M4 6h16M4 12h16M4 18h16"
             ></path>
           </svg>
-        </button>
+        </Button>
       </div>
     </div>
   );

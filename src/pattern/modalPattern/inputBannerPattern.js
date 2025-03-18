@@ -26,17 +26,6 @@ export const inputAddBanner = [
     labelText: "Image Banner: ",
     optionError: errorOptions.img,
   },
-  {
-    name: "status",
-    type: "select",
-    labelText: "Status Banner",
-    optionDisabledText: "Select Status",
-    options: [
-      { value: "true", label: "Active" },
-      { value: "false", label: "Inactive" },
-    ],
-    optionError: errorOptions.status,
-  },
 ];
 
 export const inputEditBanner = (data) => {
@@ -70,6 +59,7 @@ export const inputEditBanner = (data) => {
       name: "status",
       type: "select",
       labelText: "Status Banner",
+      grid: 6,
       optionDisabledText: "Select Status",
       key: "status",
       defaultValue: data.status,
@@ -83,6 +73,7 @@ export const inputEditBanner = (data) => {
       type: "file",
       labelText: "Image Banner: ",
       key: "img",
+      tableImg: "banner",
       defaultValue: data.img,
     },
   ];

@@ -16,7 +16,13 @@ export const useBannerHook = () => {
     submitType,
     dataRow,
   } = useGlobalHook();
-  console.log(refreshData);
+
+  const extraOptions = {
+    accessToken,
+    setRefreshData,
+    handleCloseModal,
+    handleCloseSidebar,
+  };
 
   useEffect(() => {
     getBannerService(accessToken, { setDataBanner, setRefreshData });
@@ -26,11 +32,8 @@ export const useBannerHook = () => {
     dataBanner,
     dataRow,
     submitType,
+    extraOptions,
     stateShowModal,
     stateShowSidebar,
-    accessToken,
-    setRefreshData,
-    handleCloseSidebar,
-    handleCloseModal,
   };
 };

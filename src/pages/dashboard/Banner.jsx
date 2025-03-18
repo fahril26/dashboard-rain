@@ -1,16 +1,9 @@
 import { HeaderContent } from "../../components/molecules";
 import Calendar from "../../components/organism/Calendar";
-import {
-  handleSubmitData,
-  inputAddBanner,
-  inputEditBanner,
-} from "../../pattern";
+import { inputAddBanner, inputEditBanner } from "../../pattern";
 import { useBannerHook } from "../../hook";
-import {
-  addBannerService,
-  updateBannerService,
-  deleteBannerService,
-} from "../../service";
+import { handleServiceWithOnClick, handleAddBanner } from "../../service";
+import { handleUpdateBanner } from "../../service/handlers/bannerHandlers";
 
 const Banner = () => {
   const {
@@ -19,55 +12,8 @@ const Banner = () => {
     submitType,
     stateShowModal,
     stateShowSidebar,
-    accessToken,
-    setRefreshData,
-    handleCloseSidebar,
-    handleCloseModal,
+    extraOptions,
   } = useBannerHook();
-  const handleAddEBanner = (datas) =>
-    handleSubmitData(datas, addBannerService, {
-      accessToken,
-      setRefreshData,
-      handleCloseSidebar,
-    });
-
-  const handleDeleteBanner = (datas) => {
-    handleSubmitData(datas.id, deleteBannerService, {
-      accessToken,
-      setRefreshData,
-      handleCloseSidebar,
-      handleCloseModal,
-    });
-  };
-
-  const handleUpdateBanner = (datas, extraOption) =>
-    handleSubmitData({ ...datas, id: dataRow.id }, updateBannerService, {
-      accessToken,
-      setRefreshData,
-      handleCloseSidebar,
-      ...extraOption,
-    });
-
-  const handleScheduleEventBanner = (datas, extraOption) => {
-    handleSubmitData(datas, updateBannerService, {
-      accessToken,
-      setRefreshData,
-      ...extraOption,
-    });
-  };
-
-  const handleServiceWithOnClick = (datas, extraOption) => {
-    const { type } = extraOption;
-    switch (type) {
-      case "delete":
-        handleDeleteBanner(datas);
-        break;
-
-      case "updateSchedule":
-        handleScheduleEventBanner(datas, extraOption);
-        break;
-    }
-  };
 
   return (
     <>
@@ -85,12 +31,12 @@ const Banner = () => {
         }
         stateShowModal={stateShowModal}
         stateShowSidebar={stateShowSidebar}
-        handleServiceWithOnClick={handleServiceWithOnClick}
+        handleServiceWithOnClick={handleServiceWithOnClick(extraOptions)}
         handleService={
           submitType === "add"
-            ? handleAddEBanner
+            ? handleAddBanner(extraOptions)
             : submitType === "edit"
-            ? handleUpdateBanner
+            ? handleUpdateBanner(extraOptions, dataRow)
             : null
         }
       />

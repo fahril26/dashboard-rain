@@ -7,7 +7,7 @@ const Breadcrumb = () => {
 
   return (
     <nav className="flex" aria-label="Breadcrumb">
-      <ol className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+      <ul className="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse list-none">
         {params.map((data, index) =>
           index === 0 ? (
             <li className="inline-flex items-center" key={index}>
@@ -60,7 +60,7 @@ const Breadcrumb = () => {
             </li>
           )
         )}
-      </ol>
+      </ul>
     </nav>
   );
 };

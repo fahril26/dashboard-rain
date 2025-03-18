@@ -31,6 +31,7 @@ const Form = ({
     register,
     handleSubmit,
     watch,
+    control,
     reset,
     formState: { errors },
   } = useForm({ defaultValues: generateDefaultValue(configInput) });
@@ -58,17 +59,41 @@ const Form = ({
       <form
         key={type}
         onSubmit={handleSubmit(onSubmit)}
-        className={className || ""}
+        className={`${className || ""}`}
       >
-        <InputForm
-          config={configInput}
-          register={register}
-          error={errors}
-          watch={watch}
-        />
+        <div className="grid grid-cols-12 gap-x-4">
+          {configInput.map((data, index) => {
+            const value = watch(data.name);
+            return (
+              <div
+                className={`${
+                  data.grid === 3
+                    ? "md:col-span-3 col-span-12"
+                    : data.grid === 4
+                    ? "md:col-span-4 col-span-12"
+                    : data.grid === 6
+                    ? "md:col-span-6 col-span-12"
+                    : data.grid === 12
+                    ? "md:col-span-12 col-span-12"
+                    : "col-span-12"
+                } w-full mb-5 relative`}
+                key={index}
+              >
+                <InputForm
+                  data={data}
+                  key={index}
+                  register={register}
+                  control={control}
+                  error={errors}
+                  value={value}
+                />
+              </div>
+            );
+          })}
+        </div>
 
         {forType === "sidebar" ? (
-          <div className="flex justify-between items-center">
+          <div className="flex gap-32 items-center w-full absolute bottom-5">
             <div className="space-x-2 ">
               <Button
                 className={"py-2 px-3 rounded-md bg-green-500 text-white"}
@@ -99,7 +124,7 @@ const Form = ({
           </div>
         ) : (
           <Button
-            className={`bg-blue-600 rounded-sm py-2 w-full  text-center text-white cursor-pointer hover:bg-blue-700`}
+            className={`bg-blue-600 rounded-sm py-2 w-full text-center text-white cursor-pointer hover:bg-blue-700`}
           >
             {buttonText}
           </Button>

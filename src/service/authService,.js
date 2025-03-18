@@ -1,5 +1,5 @@
 import { POST } from "../api";
-import { setCookies } from "./handleCookies";
+import { removeCookies, setCookies } from "./handleCookies";
 
 export const loginService = async (data, extraOptions) => {
   const headers = {
@@ -18,4 +18,8 @@ export const loginService = async (data, extraOptions) => {
     alert(error.response.data.message);
     console.log(error);
   }
+};
+
+export const logoutService = () => {
+  removeCookies();
 };

@@ -7,30 +7,41 @@ export const useCountryHook = () => {
   const {
     accessToken,
     refreshData,
+    searchQuery,
+    setSearchQuery,
     setRefreshData,
-    isModalOpen,
-    handleOpenModal,
     handleCloseModal,
     submitType,
+    stateShowModal,
     dataRow,
   } = useGlobalHook();
 
+  const extraOptions = { accessToken, setRefreshData, handleCloseModal };
+
   useEffect(() => {
-    getCountryService(accessToken, {
-      setDatasCountry,
-      setRefreshData,
-      handleCloseModal,
-    });
-  }, [refreshData]);
+    const fetchData = () => {
+      getCountryService(accessToken, {
+        searchQuery,
+        setDatasCountry,
+        setRefreshData,
+        handleCloseModal,
+      });
+    };
+
+    if (Object.keys(searchQuery).length > 0) {
+      const timeout = setTimeout(fetchData, 300);
+      return () => clearTimeout(timeout);
+    } else {
+      fetchData();
+    }
+  }, [refreshData, searchQuery]);
 
   return {
     datasCountry,
-    isModalOpen,
+    setSearchQuery,
     submitType,
     dataRow,
-    accessToken,
-    setRefreshData,
-    handleOpenModal,
-    handleCloseModal,
+    extraOptions,
+    stateShowModal,
   };
 };

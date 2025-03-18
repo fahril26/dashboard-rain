@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Navlink from "./Navlink";
+import { Button } from "../atom";
 
-const Accordion = ({ submenus, config, currentPath }) => {
-  const [active, setActive] = useState(false);
+const Accordion = ({ submenus, config, currentPath, handleCloseSidebar }) => {
+  const initialStatus = submenus.some((link) => link.path === currentPath);
+  const [active, setActive] = useState(initialStatus);
 
   const handleToggle = () => {
     setActive(!active);
@@ -10,7 +12,7 @@ const Accordion = ({ submenus, config, currentPath }) => {
 
   return (
     <li>
-      <button
+      <div
         onClick={handleToggle}
         className="w-full hover:bg-blue-700 cursor-pointer text-white flex justify-between items-center p-2 rounded-md"
       >
@@ -35,10 +37,11 @@ const Accordion = ({ submenus, config, currentPath }) => {
             d="M19 9l-7 7-7-7"
           />
         </svg>
-      </button>
+      </div>
 
       <Navlink
         links={submenus}
+        handleCloseSidebar={handleCloseSidebar}
         currentPath={currentPath}
         className={`pl-4 space-y-2 mt-2 transition-all duration-300 ease-in-out  ${
           active

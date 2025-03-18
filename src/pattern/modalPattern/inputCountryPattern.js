@@ -15,21 +15,33 @@ export const inputAddCountry = [
   },
 ];
 
-export const inputEditCountry = (data) => {
+export const inputEditCountry = (defaultValues) => {
   return [
     {
       labelText: "Country Name",
       name: "country_name",
       type: "text",
-      defaultValue: data.name,
+      defaultValue: defaultValues.name,
       optionError: errorOptions.name_country,
     },
     {
       labelText: "Country Code",
       name: "country_code",
       type: "text",
-      defaultValue: data.code,
+      defaultValue: defaultValues.code,
       optionError: errorOptions.code_country,
+    },
+    {
+      name: "status",
+      type: "select",
+      labelText: "Status",
+      optionDisabledText: "Select Status",
+      defaultValue: defaultValues.status,
+      grid: 4,
+      options: [
+        { label: "Active", value: true },
+        { label: "Inactive", value: false },
+      ],
     },
   ];
 };

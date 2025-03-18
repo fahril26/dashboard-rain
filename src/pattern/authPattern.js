@@ -5,6 +5,7 @@ export const loginPattern = [
   {
     name: "username",
     type: "text",
+    grid: 12,
     labelText: "Username",
     optionError: errorOptions.username,
   },
@@ -12,6 +13,7 @@ export const loginPattern = [
     name: "password",
     type: "password",
     labelText: "Password",
+    grid: 12,
     icon: FaEye,
     optionError: errorOptions.password,
   },

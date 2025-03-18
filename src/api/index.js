@@ -7,7 +7,7 @@ export const POST = (endpoint, data, headers) => {
 };
 
 export const GET = (endpoint, accessToken) => {
-  return axios.get(`${import.meta.env.VITE_API_URL}${endpoint}`, {
+  return axios.get(`${import.meta.env.VITE_API_URL}/${endpoint}`, {
     headers: {
       "Content-Type": "application/json",
       "x-access-token": `mktech ${accessToken}`,

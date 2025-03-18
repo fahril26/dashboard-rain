@@ -1,4 +1,5 @@
 import Calendar from "./Calendar";
 import Table from "./Table";
+import Editor from "./Editor";
 
-export { Calendar, Table };
+export { Calendar, Table, Editor };

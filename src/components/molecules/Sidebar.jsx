@@ -1,9 +1,9 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { navLink } from "../../pattern";
 import Navlink from "./Navlink";
 import Form from "./Form";
-import { ModalLayout } from "../layouts";
-import ConfirmDelete from "./ConfirmDelete";
+import { Button } from "../atom";
+import { logoutService } from "../../service";
 
 const Sidebar = ({
   type = "",
@@ -14,6 +14,7 @@ const Sidebar = ({
   submitType,
   handleService,
   handleShow,
+  className,
   handleOpenModal,
   dataDefault,
   isShow = true,
@@ -22,7 +23,7 @@ const Sidebar = ({
   return (
     <>
       <div
-        className={`${slide ? "fixed" : ""} flex ${
+        className={`${slide ? "fixed md:flex " : ""} flex ${
           isShow && slide ? "inset-0" : ""
         }`}
       >
@@ -30,34 +31,67 @@ const Sidebar = ({
           <div
             className="flex-1 bg-black/60 h-screen absolute inset-0 "
             onClick={handleShow}
-          ></div>
+          />
         )}
 
         <div
           className={`${
-            slide ? "fixed w-96 z-40" : "static w-72"
-          } inset-y-0 ${position} flex-1  ${
-            type === "form" ? "bg-white px-6" : "bg-blue-600 text-white"
-          }  p-4 transform transition-transform duration-300 shadow-xl ${
-            isShow ? "translate-x-0" : "translate-x-full"
-          }`}
+            slide
+              ? `fixed w-96 z-40 ${type !== "form" ? "pt-20" : ""}`
+              : "static w-72"
+          } ${
+            type === "form"
+              ? "bg-white px-6"
+              : "bg-blue-600 text-white md:translate-x-0"
+          }  ${
+            isShow
+              ? "translate-x-0 "
+              : `${
+                  position.includes("right")
+                    ? "translate-x-full"
+                    : "-translate-x-full"
+                }`
+          } ${
+            className || ""
+          } inset-y-0 ${position} flex-1 p-4 transform transition-transform duration-300 shadow-xl`}
         >
-          {type === "form" ? (
-            <>
-              <h3 className="text-gray-500 font-semibold mb-6">{title}</h3>
-              <Form
-                configInput={inputForm}
-                handleSubmitData={handleService}
-                forType={"sidebar"}
-                dataDefault={dataDefault}
-                type={submitType}
-                handleOpenModal={handleOpenModal}
-                handleShowSidebar={handleShow}
+          <div
+            className={`flex flex-col h-full  ${
+              type !== "form" ? "justify-between" : ""
+            }`}
+          >
+            {type === "form" ? (
+              <>
+                <h3 className="text-gray-500 font-semibold mb-6">{title}</h3>
+                <Form
+                  configInput={inputForm}
+                  handleSubmitData={handleService}
+                  forType={"sidebar"}
+                  dataDefault={dataDefault}
+                  type={submitType}
+                  handleOpenModal={handleOpenModal}
+                  handleShowSidebar={handleShow}
+                />
+              </>
+            ) : (
+              <Navlink
+                links={navLink}
+                currentPath={currentPath}
+                handleCloseSidebar={handleShow}
               />
-            </>
-          ) : (
-            <Navlink links={navLink} currentPath={currentPath} />
-          )}
+            )}
+
+            {type !== "form" && (
+              <Link className="lg:hidden" to={"/login"}>
+                <Button
+                  className={"hover:underline "}
+                  onClick={() => logoutService()}
+                >
+                  Logout
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
       </div>
     </>

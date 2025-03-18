@@ -1,0 +1,157 @@
+import { errorOptions } from "../error";
+
+export const inputAddOffice = (options) => [
+  {
+    labelText: "Office Name",
+    name: "office_name",
+    type: "text",
+    optionError: errorOptions.name_office,
+  },
+  {
+    labelText: "Address",
+    name: "address",
+    type: "text",
+    optionError: errorOptions.adress,
+  },
+  {
+    name: "id_city",
+    type: "select",
+    labelText: "Name City",
+    optionDisabledText: "Select City",
+    options,
+    grid: 12,
+    optionError: errorOptions.select_city,
+  },
+  {
+    labelText: "Latitude",
+    name: "latitude",
+    grid: 6,
+    type: "text",
+    optionError: errorOptions.latitude,
+  },
+  {
+    labelText: "Longitude",
+    name: "longitude",
+    grid: 6,
+    type: "text",
+    optionError: errorOptions.longitute,
+  },
+  {
+    labelText: "Istagram",
+    name: "ig",
+    grid: 6,
+    type: "text",
+    optionError: errorOptions.social_media,
+  },
+  {
+    labelText: "Facebook",
+    name: "fb",
+    grid: 6,
+    type: "text",
+    optionError: errorOptions.social_media,
+  },
+  {
+    labelText: "X",
+    name: "x",
+    grid: 6,
+    type: "text",
+    optionError: errorOptions.social_media,
+  },
+  {
+    labelText: "Youtube",
+    name: "yt",
+    grid: 6,
+    type: "text",
+    optionError: errorOptions.social_media,
+  },
+];
+
+export const inputEditOffice = (defaultValues, options) => {
+  return [
+    {
+      labelText: "Office Name",
+      name: "office_name",
+      type: "text",
+      optionError: errorOptions.name_office,
+      defaultValue: defaultValues.name,
+    },
+    {
+      labelText: "Address",
+      name: "address",
+      type: "text",
+      optionError: errorOptions.adress,
+      defaultValue: defaultValues.address,
+    },
+    {
+      labelText: "Latitude",
+      name: "latitude",
+      grid: 6,
+      type: "text",
+      optionError: errorOptions.latitude,
+      defaultValue: defaultValues.latitude,
+    },
+    {
+      labelText: "Longitude",
+      name: "longitude",
+      grid: 6,
+      type: "text",
+      optionError: errorOptions.longitute,
+      defaultValue: defaultValues.longitude,
+    },
+    {
+      labelText: "Istagram",
+      name: "ig",
+      type: "text",
+      grid: 6,
+      optionError: errorOptions.social_media,
+      defaultValue: defaultValues.ig,
+    },
+    {
+      labelText: "Facebook",
+      name: "fb",
+      type: "text",
+      grid: 6,
+      optionError: errorOptions.social_media,
+      defaultValue: defaultValues.fb,
+    },
+    {
+      labelText: "X",
+      name: "x",
+      type: "text",
+      grid: 6,
+      optionError: errorOptions.social_media,
+      defaultValue: defaultValues.x,
+    },
+    {
+      labelText: "Youtube",
+      name: "yt",
+      type: "text",
+      grid: 6,
+      optionError: errorOptions.social_media,
+      defaultValue: defaultValues.yt,
+    },
+    {
+      name: "id_city",
+      type: "select",
+      grid: 6,
+      labelText: "Name City",
+      optionDisabledText: "Select City",
+      options,
+      optionError: errorOptions.select_city,
+      defaultValue: defaultValues.id_city,
+    },
+
+    {
+      name: "status",
+      type: "select",
+      labelText: "Status",
+      optionDisabledText: "Select Status",
+      defaultValue: defaultValues.status,
+      grid: 6,
+      options: [
+        { label: "Active", value: true },
+        { label: "Inactive", value: false },
+      ],
+    },
+  ];
+};

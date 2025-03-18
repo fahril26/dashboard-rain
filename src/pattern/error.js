@@ -1,5 +1,3 @@
-import { max } from "date-fns";
-
 export const errorOptions = {
   username: {
     required: "Username is Required",
@@ -14,6 +12,22 @@ export const errorOptions = {
     minLength: {
       value: 4,
       message: "Password must be at least 4 characters",
+    },
+  },
+
+  title_about: {
+    required: "Title is Required",
+    minLength: {
+      value: 4,
+      message: "Title must be at least 4 characters",
+    },
+  },
+
+  desc_about: {
+    required: "Description is Required",
+    minLength: {
+      value: 10,
+      message: "Description must be at least 10 characters",
     },
   },
 
@@ -58,6 +72,87 @@ export const errorOptions = {
     maxLength: {
       value: 3,
       message: "Code Country must be at most 3 characters",
+    },
+  },
+
+  name_province: {
+    required: "Name Province is Required",
+    minLength: {
+      value: 4,
+      message: "Name Provice must be at least 4 characters",
+    },
+  },
+
+  code_province: {
+    required: "Code Province is Required",
+    minLength: {
+      value: 3,
+      message: "Code Province must be at least 3 characters",
+    },
+    maxLength: {
+      value: 3,
+      message: "Code Province must be at most 3 characters",
+    },
+  },
+
+  select_country: {
+    required: "Select Country is Required",
+  },
+
+  name_city: {
+    required: "Name City is Required",
+    minLength: {
+      value: 4,
+      message: "Name City must be at least 4 characters",
+    },
+  },
+
+  code_city: {
+    required: "Code City is Required",
+    minLength: {
+      value: 3,
+      message: "Code City must be at least 3 characters",
+    },
+    maxLength: {
+      value: 3,
+      message: "Code City must be at most 3 characters",
+    },
+  },
+
+  select_province: {
+    required: "Select Province is Required",
+  },
+
+  name_office: {
+    required: "Name Office is Required",
+    minLength: {
+      value: 4,
+      message: "Name Office must be at least 4 characters",
+    },
+  },
+
+  social_media: {
+    required: "Social Media is Required",
+  },
+
+  select_city: {
+    required: "Select City is Required",
+  },
+  adress: {
+    required: "Address is Required",
+  },
+  longitute: {
+    required: "Longitute is Required",
+    pattern: {
+      value: /^[0-9]+$/,
+      message: "Hanya boleh angka",
+    },
+  },
+  latitude: {
+    required: "Latitude is Required",
+    pattern: {
+      value: /^[0-9]+$/,
+      message: "Hanya boleh angka",
     },
   },
 };
